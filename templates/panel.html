@@ -1,0 +1,51 @@
+<!-- Circle 面板模板 -->
+<div class="circle-container">
+  <div class="circle-header">
+    <div class="circle-title">
+      <i class="fa-solid fa-circle-nodes"></i>
+      <span>数字生命圈子</span>
+    </div>
+    <div class="circle-actions">
+      <button class="circle-btn" id="circle-refresh" title="刷新">
+        <i class="fa-solid fa-rotate"></i>
+      </button>
+      <button class="circle-btn" id="circle-settings" title="设置">
+        <i class="fa-solid fa-gear"></i>
+      </button>
+      <button class="circle-btn" id="circle-close" title="关闭">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="circle-filters">
+    <button class="filter-btn active" data-filter="latest">
+      <i class="fa-solid fa-clock"></i> 最新
+    </button>
+    <button class="filter-btn" data-filter="hot">
+      <i class="fa-solid fa-fire"></i> 热门
+    </button>
+    <div class="filter-search">
+      <input type="text" placeholder="搜索角色..." id="circle-search-input">
+      <button id="circle-search-btn">
+        <i class="fa-solid fa-search"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="circle-posts" id="circle-posts-container">
+    <div class="circle-loading">
+      <i class="fa-solid fa-circle-notch fa-spin"></i>
+      <span>加载中...</span>
+    </div>
+  </div>
+
+  <div class="circle-footer">
+    <div class="circle-stats" id="circle-stats">
+      <span>加载统计中...</span>
+    </div>
+    <div class="circle-info">
+      <i class="fa-solid fa-circle-info" title="数据存储在本地浏览器中"></i>
+    </div>
+  </div>
+</div>

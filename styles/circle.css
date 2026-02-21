@@ -1,0 +1,386 @@
+/**
+ * Circle - 数字生命圈子 样式
+ */
+
+/* 按钮 */
+#circle-button {
+  position: fixed !important;
+  top: 10px !important;
+  right: 200px !important;
+  width: 40px !important;
+  height: 40px !important;
+  background: rgba(255, 107, 107, 0.9) !important;
+  border-radius: 8px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 24px !important;
+  cursor: pointer !important;
+  z-index: 99999 !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
+  transition: all 0.2s ease !important;
+  user-select: none !important;
+}
+
+#circle-button:hover {
+  transform: scale(1.1) !important;
+  background: rgba(255, 107, 107, 1) !important;
+  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4) !important;
+}
+
+/* 面板遮罩 */
+#circle-panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 99998;
+}
+
+/* 面板主体 */
+#circle-panel > div:last-child {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 700px;
+  max-width: 90vw;
+  height: 600px;
+  max-height: 80vh;
+  background: rgba(30, 30, 35, 0.98);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 107, 107, 0.3);
+  box-shadow: 0 25px 80px rgba(0,0,0,0.8);
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: white;
+}
+
+/* 面板头部 */
+#circle-panel h2 {
+  margin: 0;
+  padding: 20px 24px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #ff6b6b;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+/* 面板内容区 */
+#circle-panel .circle-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+/* 测试按钮 */
+#circle-test {
+  background: linear-gradient(135deg, #ff6b6b, #ff8e8e) !important;
+  border: none !important;
+  color: white !important;
+  padding: 8px 16px !important;
+  border-radius: 20px !important;
+  font-size: 13px !important;
+  cursor: pointer !important;
+  margin-right: 10px !important;
+  font-weight: 600 !important;
+  box-shadow: 0 2px 8px rgba(255,107,107,0.4) !important;
+  transition: all 0.2s !important;
+}
+
+#circle-test:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 12px rgba(255,107,107,0.5) !important;
+}
+
+#circle-test:disabled {
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+}
+
+/* 刷新按钮 */
+#circle-refresh {
+  background: rgba(255,255,255,0.1) !important;
+  border: none !important;
+  color: white !important;
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 50% !important;
+  font-size: 16px !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin-right: 10px !important;
+  transition: all 0.2s !important;
+}
+
+#circle-refresh:hover {
+  background: rgba(255,255,255,0.2) !important;
+  transform: rotate(180deg) !important;
+}
+
+/* 关闭按钮 */
+#circle-close {
+  background: rgba(255,255,255,0.1) !important;
+  border: none !important;
+  color: white !important;
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 50% !important;
+  font-size: 24px !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.2s !important;
+}
+
+#circle-close:hover {
+  background: rgba(255,255,255,0.25) !important;
+}
+
+/* 帖子卡片 */
+.circle-post {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  transition: all 0.2s;
+}
+
+.circle-post:hover {
+  border-color: rgba(255,107,107,0.2);
+  background: rgba(255,255,255,0.04);
+}
+
+/* 帖子头部 */
+.circle-post-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.circle-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255,107,107,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.circle-post-meta {
+  flex: 1;
+}
+
+.circle-author {
+  font-weight: 600;
+  color: #ff6b6b;
+  font-size: 15px;
+}
+
+.circle-time {
+  font-size: 12px;
+  opacity: 0.6;
+  margin-top: 2px;
+}
+
+/* 帖子内容 */
+.circle-post-content {
+  line-height: 1.7;
+  color: white;
+  font-size: 14px;
+  margin-bottom: 12px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* 标签 */
+.circle-post-tags {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.circle-tag {
+  background: rgba(255,107,107,0.1);
+  color: #ff6b6b;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  border: 1px solid rgba(255,107,107,0.2);
+}
+
+/* 统计信息 */
+.circle-post-stats {
+  display: flex;
+  gap: 16px;
+  font-size: 13px;
+  opacity: 0.7;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+.circle-post-stats span {
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.circle-post-stats span:hover {
+  opacity: 1;
+  color: #ff6b6b;
+}
+
+/* 评论区 */
+.circle-comments {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+.circle-comment {
+  font-size: 13px;
+  margin-bottom: 8px;
+  padding: 8px 12px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 8px;
+}
+
+.comment-author {
+  color: #ff6b6b;
+  font-weight: 500;
+}
+
+.comment-content {
+  opacity: 0.9;
+  margin-left: 4px;
+}
+
+/* 空状态 */
+.circle-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  opacity: 0.6;
+  text-align: center;
+}
+
+.circle-empty-icon {
+  font-size: 64px;
+  margin-bottom: 20px;
+}
+
+.circle-empty p {
+  margin: 0;
+  font-size: 16px;
+}
+
+.circle-empty-hint {
+  font-size: 14px !important;
+  margin-top: 8px !important;
+  opacity: 0.8;
+}
+
+/* 面板底部 */
+.circle-footer {
+  padding: 12px 24px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  font-size: 12px;
+  opacity: 0.6;
+  text-align: center;
+}
+
+/* 测试对话框 */
+#circle-test-dialog {
+  animation: circle-dialog-in 0.2s ease;
+}
+
+#circle-test-backdrop {
+  animation: circle-fade-in 0.2s ease;
+}
+
+@keyframes circle-dialog-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes circle-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* 生成提示 */
+#circle-generating {
+  animation: circle-slide-in 0.2s ease;
+}
+
+@keyframes circle-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 滚动条美化 */
+#circle-panel ::-webkit-scrollbar {
+  width: 8px;
+}
+
+#circle-panel ::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#circle-panel ::-webkit-scrollbar-thumb {
+  background: rgba(255,107,107,0.3);
+  border-radius: 4px;
+}
+
+#circle-panel ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255,107,107,0.5);
+}
+
+/* 选择框样式 */
+#circle-test-dialog select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23fff' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 32px !important;
+}
+
+#circle-test-dialog select:focus {
+  border-color: rgba(255,107,107,0.5);
+  background-color: rgba(255,255,255,0.12);
+}
+
+#circle-test-dialog select option {
+  background: #2a2a2f;
+  color: white;
+}
