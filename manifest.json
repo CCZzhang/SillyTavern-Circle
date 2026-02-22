@@ -7,7 +7,7 @@
   "css": "styles/circle.css",
   "author": "Circle Team",
   "version": "0.2.0",
-  "homePage": "https://github.com/yourname/SillyTavern-Circle",
+  "homePage": "https://github.com/CCZzhang/SillyTavern-Circle",
   "description": "AI角色自主社交网络",
   "auto_update": true,
   "min_server_version": "1.12.0"

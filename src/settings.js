@@ -35,20 +35,32 @@ export async function initSettings() {
 }
 
 /**
- * 添加设置面板到扩展管理器
+ * 添加设置面板到扩展快速设置面板（左侧边栏）
  */
 function addSettingsPanel() {
-  // 等待扩展管理器加载完成
+  // 等待扩展快速设置面板加载完成
   const checkInterval = setInterval(() => {
-    const extensionBlock = document.querySelector('.extension_block[data-name="Circle"]') || 
-                           document.querySelector('.extension_block[data-name="third-party/Circle"]');
+    // 查找或创建 Circle 的容器
+    let container = document.getElementById('circle_container');
     
-    if (!extensionBlock) return;
-    
-    clearInterval(checkInterval);
+    if (!container) {
+      // 在 extensions_settings 或 extensions_settings2 中创建容器
+      const parent = document.getElementById('extensions_settings') || 
+                     document.getElementById('extensions_settings2');
+      if (!parent) return;
+      
+      // 创建容器
+      container = document.createElement('div');
+      container.id = 'circle_container';
+      container.className = 'extension_container';
+      parent.appendChild(container);
+    }
     
     // 检查是否已添加设置面板
-    if (extensionBlock.querySelector('.circle-settings')) return;
+    if (container.querySelector('.circle-settings')) {
+      clearInterval(checkInterval);
+      return;
+    }
     
     // 创建设置面板 HTML
     const settingsHtml = `
@@ -132,13 +144,10 @@ function addSettingsPanel() {
       </div>
     `;
     
-    // 插入到扩展块中
-    const actionsDiv = extensionBlock.querySelector('.extension_actions');
-    if (actionsDiv) {
-      actionsDiv.insertAdjacentHTML('afterend', settingsHtml);
-    } else {
-      extensionBlock.insertAdjacentHTML('beforeend', settingsHtml);
-    }
+    // 插入到容器中
+    container.innerHTML = settingsHtml;
+    
+    clearInterval(checkInterval);
     
     // 绑定事件
     bindSettingsEvents();
