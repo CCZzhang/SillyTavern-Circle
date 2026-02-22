@@ -6,6 +6,7 @@ console.log('[Circle] Script loaded');
 
 import { storage } from './storage.js';
 import { aiService } from './ai-service.js';
+import { initSettings } from './settings.js';
 
 /**
  * 获取角色头像 URL
@@ -65,6 +66,9 @@ async function init() {
         await storage.savePost(post);
       }
     }
+    
+    // Initialize settings panel
+    initSettings();
     
     // Start AI service
     aiService.start();

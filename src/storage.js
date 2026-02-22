@@ -327,6 +327,31 @@ class Storage {
       messageCount: counts[2]
     };
   }
+
+  // ========== Settings ==========
+  async saveSettings(settings) {
+    return new Promise((resolve) => {
+      try {
+        localStorage.setItem('circle-extension-settings', JSON.stringify(settings));
+        resolve(true);
+      } catch (e) {
+        console.error('[Circle] Failed to save settings:', e);
+        resolve(false);
+      }
+    });
+  }
+
+  async getSettings() {
+    return new Promise((resolve) => {
+      try {
+        const data = localStorage.getItem('circle-extension-settings');
+        resolve(data ? JSON.parse(data) : null);
+      } catch (e) {
+        console.error('[Circle] Failed to get settings:', e);
+        resolve(null);
+      }
+    });
+  }
 }
 
 export const storage = new Storage();
