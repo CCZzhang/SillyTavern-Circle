@@ -10,7 +10,6 @@ const DEFAULT_SETTINGS = {
   enabled: true,
   autoPostInterval: 5, // 分钟
   autoPostProbability: 30, // 百分比
-  maxPostsPerDay: 10,
   enableCharacterComments: true,
   debugMode: false
 };
@@ -29,125 +28,66 @@ export async function initSettings() {
   }
   
   // 添加设置面板
-  addSettingsPanel();
+  await addSettingsPanel();
   
   console.log('[Circle] Settings initialized:', currentSettings);
 }
 
 /**
- * 添加设置面板到扩展快速设置面板（左侧边栏）
+ * 添加设置面板到扩展快速设置面板
  */
-function addSettingsPanel() {
-  // 等待扩展快速设置面板加载完成
-  const checkInterval = setInterval(() => {
-    // 查找或创建 Circle 的容器
+async function addSettingsPanel() {
+  // 等待 SillyTavern 上下文可用
+  const context = window.SillyTavern?.getContext?.();
+  if (!context?.renderExtensionTemplateAsync) {
+    setTimeout(addSettingsPanel, 500);
+    return;
+  }
+  
+  try {
+    // 查找或创建容器
     let container = document.getElementById('circle_container');
-    
     if (!container) {
-      // 在 extensions_settings 或 extensions_settings2 中创建容器
       const parent = document.getElementById('extensions_settings') || 
                      document.getElementById('extensions_settings2');
-      if (!parent) return;
+      if (!parent) {
+        console.warn('[Circle] Parent container not found, retrying...');
+        setTimeout(addSettingsPanel, 500);
+        return;
+      }
       
-      // 创建容器
       container = document.createElement('div');
       container.id = 'circle_container';
       container.className = 'extension_container';
       parent.appendChild(container);
     }
     
-    // 检查是否已添加设置面板
-    if (container.querySelector('.circle-settings')) {
-      clearInterval(checkInterval);
-      return;
+    // 检查是否已添加
+    if (container.querySelector('#circle_settings')) return;
+    
+    // 加载模板 - 使用相对路径
+    const response = await fetch('/scripts/extensions/third-party/Circle/templates/settings.html');
+    if (!response.ok) throw new Error('Failed to load settings template');
+    
+    let html = await response.text();
+    
+    // 替换默认值为当前设置
+    html = html.replace('value="5"', `value="${currentSettings.autoPostInterval}"`);
+    html = html.replace('value="30"', `value="${currentSettings.autoPostProbability}"`);
+    html = html.replace('checked />', `checked />`).replace(/checked=""/g, '');
+    
+    // 更新复选框状态
+    if (!currentSettings.enabled) {
+      html = html.replace('id="circle-setting-enabled" type="checkbox" checked', 'id="circle-setting-enabled" type="checkbox"');
+    }
+    if (!currentSettings.enableCharacterComments) {
+      html = html.replace('id="circle-setting-comments" type="checkbox" checked', 'id="circle-setting-comments" type="checkbox"');
+    }
+    if (currentSettings.debugMode) {
+      html = html.replace('id="circle-setting-debug" type="checkbox"', 'id="circle-setting-debug" type="checkbox" checked');
     }
     
-    // 创建设置面板 HTML
-    const settingsHtml = `
-      <div class="circle-settings" style="
-        margin-top: 10px;
-        padding: 15px;
-        background: rgba(255,107,107,0.05);
-        border: 1px solid rgba(255,107,107,0.2);
-        border-radius: 8px;
-        font-size: 13px;
-      ">
-        <div style="font-weight: 600; color: #ff6b6b; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
-          <span>⚙️</span> Circle 设置
-        </div>
-        
-        <!-- 自动发帖开关 -->
-        <div style="margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;">
-          <label style="cursor: pointer;">自动发帖</label>
-          <input type="checkbox" id="circle-setting-enabled" ${currentSettings.enabled ? 'checked' : ''} 
-            style="cursor: pointer; width: 18px; height: 18px;">
-        </div>
-        
-        <!-- 发帖间隔 -->
-        <div style="margin-bottom: 12px;">
-          <label style="display: block; margin-bottom: 4px;">最小间隔（分钟）</label>
-          <input type="number" id="circle-setting-interval" value="${currentSettings.autoPostInterval}" min="1" max="60"
-            style="width: 60px; padding: 4px 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; color: inherit;">
-        </div>
-        
-        <!-- 发帖概率 -->
-        <div style="margin-bottom: 12px;">
-          <label style="display: block; margin-bottom: 4px;">触发概率（%）</label>
-          <input type="range" id="circle-setting-probability" value="${currentSettings.autoPostProbability}" min="0" max="100"
-            style="width: 100%; cursor: pointer;">
-          <div style="text-align: center; margin-top: 2px; opacity: 0.8;">
-            <span id="circle-probability-value">${currentSettings.autoPostProbability}</span>%
-          </div>
-        </div>
-        
-        <!-- 角色互动 -->
-        <div style="margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;">
-          <label style="cursor: pointer;">角色间互动</label>
-          <input type="checkbox" id="circle-setting-comments" ${currentSettings.enableCharacterComments ? 'checked' : ''}
-            style="cursor: pointer; width: 18px; height: 18px;">
-        </div>
-        
-        <!-- 调试模式 -->
-        <div style="margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;">
-          <label style="cursor: pointer;">调试模式</label>
-          <input type="checkbox" id="circle-setting-debug" ${currentSettings.debugMode ? 'checked' : ''}
-            style="cursor: pointer; width: 18px; height: 18px;">
-        </div>
-        
-        <!-- 按钮组 -->
-        <div style="display: flex; gap: 8px; margin-top: 15px;">
-          <button id="circle-save-settings" style="
-            flex: 1;
-            background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
-            border: none;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-          ">保存</button>
-          <button id="circle-reset-settings" style="
-            flex: 1;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            color: inherit;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-          ">重置</button>
-        </div>
-        
-        <!-- 统计信息 -->
-        <div style="margin-top: 15px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 12px; opacity: 0.8;">
-          <div>📊 统计：<span id="circle-stats">加载中...</span></div>
-        </div>
-      </div>
-    `;
-    
-    // 插入到容器中
-    container.innerHTML = settingsHtml;
-    
-    clearInterval(checkInterval);
+    container.innerHTML = html;
     
     // 绑定事件
     bindSettingsEvents();
@@ -155,17 +95,33 @@ function addSettingsPanel() {
     // 加载统计
     loadStats();
     
-  }, 1000);
+    console.log('[Circle] Settings panel added');
+  } catch (error) {
+    console.error('[Circle] Failed to add settings panel:', error);
+  }
 }
 
 /**
  * 绑定设置事件
  */
 function bindSettingsEvents() {
-  // 概率滑块实时更新
+  // 间隔滑块
+  const intervalSlider = document.getElementById('circle-setting-interval');
+  const intervalValue = document.getElementById('circle-interval-value');
+  if (intervalSlider && intervalValue) {
+    intervalSlider.value = currentSettings.autoPostInterval;
+    intervalValue.textContent = intervalSlider.value;
+    intervalSlider.addEventListener('input', () => {
+      intervalValue.textContent = intervalSlider.value;
+    });
+  }
+  
+  // 概率滑块
   const probSlider = document.getElementById('circle-setting-probability');
   const probValue = document.getElementById('circle-probability-value');
   if (probSlider && probValue) {
+    probSlider.value = currentSettings.autoPostProbability;
+    probValue.textContent = probSlider.value;
     probSlider.addEventListener('input', () => {
       probValue.textContent = probSlider.value;
     });
@@ -210,14 +166,16 @@ async function saveSettings() {
   
   // 显示提示
   const btn = document.getElementById('circle-save-settings');
-  const originalText = btn.textContent;
-  btn.textContent = '✓ 已保存';
-  btn.style.background = '#4ade80';
-  
-  setTimeout(() => {
-    btn.textContent = originalText;
-    btn.style.background = '';
-  }, 1500);
+  if (btn) {
+    const originalHTML = btn.innerHTML;
+    btn.innerHTML = '<i class="fa-solid fa-check"></i><span>已保存</span>';
+    btn.style.background = '#4ade80';
+    
+    setTimeout(() => {
+      btn.innerHTML = originalHTML;
+      btn.style.background = '';
+    }, 1500);
+  }
   
   console.log('[Circle] Settings saved:', newSettings);
 }
@@ -232,8 +190,10 @@ async function resetSettings() {
   const enabledCheckbox = document.getElementById('circle-setting-enabled');
   if (enabledCheckbox) enabledCheckbox.checked = currentSettings.enabled;
   
-  const intervalInput = document.getElementById('circle-setting-interval');
-  if (intervalInput) intervalInput.value = currentSettings.autoPostInterval;
+  const intervalSlider = document.getElementById('circle-setting-interval');
+  const intervalValue = document.getElementById('circle-interval-value');
+  if (intervalSlider) intervalSlider.value = currentSettings.autoPostInterval;
+  if (intervalValue) intervalValue.textContent = currentSettings.autoPostInterval;
   
   const probSlider = document.getElementById('circle-setting-probability');
   const probValue = document.getElementById('circle-probability-value');
@@ -257,7 +217,6 @@ async function resetSettings() {
  * 更新 AI 服务设置
  */
 function updateAIServiceSettings(settings) {
-  // 触发自定义事件通知 ai-service
   window.dispatchEvent(new CustomEvent('circle:settings_changed', { 
     detail: settings 
   }));
@@ -274,7 +233,7 @@ async function loadStats() {
     const { posts } = await storage.getPosts({ limit: 1000 });
     const postCount = posts?.length || 0;
     
-    statsEl.innerHTML = `${postCount} 条帖子`;
+    statsEl.textContent = postCount;
   } catch (e) {
     console.error('[Circle] Failed to load stats:', e);
   }

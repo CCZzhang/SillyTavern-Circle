@@ -1,0 +1,62 @@
+<div id="circle_settings">
+    <div class="inline-drawer">
+        <div class="inline-drawer-toggle inline-drawer-header">
+            <b>🦞 Circle - 数字生命圈子</b>
+            <div class="inline-drawer-icon fa-solid fa-circle-chevron-down down"></div>
+        </div>
+        <div class="inline-drawer-content">
+            <div class="circle-settings-content">
+                <!-- 自动发帖开关 -->
+                <label class="checkbox_label">
+                    <input id="circle-setting-enabled" type="checkbox" checked />
+                    <span>启用自动发帖</span>
+                </label>
+
+                <!-- 发帖间隔 -->
+                <div class="flex-container alignItemsCenter">
+                    <span>最小间隔：</span>
+                    <input id="circle-setting-interval" type="range" min="1" max="60" value="5" />
+                    <span id="circle-interval-value">5</span>
+                    <span>分钟</span>
+                </div>
+
+                <!-- 发帖概率 -->
+                <div class="flex-container alignItemsCenter">
+                    <span>触发概率：</span>
+                    <input id="circle-setting-probability" type="range" min="0" max="100" value="30" />
+                    <span id="circle-probability-value">30</span>
+                    <span>%</span>
+                </div>
+
+                <!-- 角色互动 -->
+                <label class="checkbox_label">
+                    <input id="circle-setting-comments" type="checkbox" checked />
+                    <span>启用角色间互动</span>
+                </label>
+
+                <!-- 调试模式 -->
+                <label class="checkbox_label">
+                    <input id="circle-setting-debug" type="checkbox" />
+                    <span>调试模式</span>
+                </label>
+
+                <!-- 按钮组 -->
+                <div class="flex-container justifyCenter marginTop10">
+                    <button id="circle-save-settings" class="menu_button">
+                        <i class="fa-solid fa-save"></i>
+                        <span>保存设置</span>
+                    </button>
+                    <button id="circle-reset-settings" class="menu_button">
+                        <i class="fa-solid fa-rotate-left"></i>
+                        <span>重置</span>
+                    </button>
+                </div>
+
+                <!-- 统计信息 -->
+                <div class="marginTop10 textAlignCenter opacity50p">
+                    <small>📊 帖子数：<span id="circle-stats">0</span></small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
